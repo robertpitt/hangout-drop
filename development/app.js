@@ -2,7 +2,6 @@
  * Name: Hangout Drop
  * Description: Real-time sharing application for all forms of media.
 */
-
 goog.provide("drop.app");
 
 /**
@@ -15,25 +14,25 @@ drop.app = function()
 	 * Hangout URL
 	 * @type {String|null}
 	*/
-	this.hangout_url = null;
+	this.hangoutUrl = null;
 
 	/**
 	 * Hangout ID
 	 * @type {String|null}
 	*/
-	this.hangout_id = null;
+	this.hangoutId = null;
 
 	/**
-	 * Hangout ID
+	 * Hangout Locale
 	 * @type {String|null}
 	*/
-	this.hangout_locale = null;
+	this.hangoutLocale = null;
 
 	/**
 	 * Local participants GUID
 	 * @type {String|null}
 	*/
-	this.local_participant = null;
+	this.localParticipantID = null;
 
 	/**
 	 * Participants container
@@ -51,13 +50,13 @@ drop.app = function()
 	 * Application public
 	 * @type {Booleon}
 	*/
-	this.hangout_public = false;
+	this.isPublic = false;
 
 	/**
 	 * Application Visibilty
 	 * @type {Booleon}
 	*/
-	this.app_visable = true;
+	this.appVisable = true;
 
 	/**
 	 * Bind {gapi.hangout.ApiReadyEvent} event
@@ -76,59 +75,70 @@ drop.app.prototype.onApiReady = function(ApiReadyEvent)
 	}
 
 	/**
-	 * Set the hangout URL to the outer context
+	 * Get the intial set of data from gapi
 	*/
-	this.hangout_url = gapi.hangout.getHangoutUrl();
+	try{
+		/**
+		 * Set the hangout URL to the outer context
+		*/
+		this.hangoutUrl = gapi.hangout.getHangoutUrl();
 
-	/**
-		 * Set the hangout ID to the outer context
-	*/
-	this.hangout_id = gapi.hangout.getHangoutId();
+		/**
+			 * Set the hangout ID to the outer context
+		*/
+		this.hangoutId = gapi.hangout.getHangoutId();
 
-	/**
-	 * Get the current locale
-	*/
-	this.hangout_locale = gapi.hangout.getLocale();
+		/**
+		 * Get the current locale
+		*/
+		this.hangoutLocale = gapi.hangout.getLocale();
 
-	/**
-	 * Get the locale participants GUID
-	*/
-	this.local_participant = gapi.hangout.getParticipantId();
+		/**
+		 * Get the locale participants GUID
+		*/
+		this.localParticipantID = gapi.hangout.getParticipantId();
 
-	/**
-	 * Get the current participants array
-	*/
-	this.participants = gapi.hangout.getParticipants();
+		/**
+		 * Get the current participants array
+		*/
+		this.participants = gapi.hangout.getParticipants();
 
-	/**
-	 * Get the current participants that have the enabled the application.
-	*/
-	this.enabledParticipants = gapi.hangout.getEnabledParticipants();
+		/**
+		 * Get the current participants that have the enabled the application.
+		*/
+		this.enabledParticipants = gapi.hangout.getEnabledParticipants();
 
-	/**
-	 * Fetch the current public state
-	*/
-	this.hangout_public = gapi.hangout.isPublic();
+		/**
+		 * Fetch the current public state
+		*/
+		this.isPublic = gapi.hangout.isPublic();
+	}catch(e){
+		console.error("Unable to collect metadata from gapi", e);
+	}
 
-	/**
-	 * Bind app visibility event
-	*/
-	gapi.hangout.onAppVisible.add(goog.bind(this.onAppVisible, this));
+	try{
+		/**
+		 * Bind app visibility event
+		*/
+		gapi.hangout.onAppVisible.add(goog.bind(this.onAppVisible, this));
 
-	/**
-	 * Monitor the participants
-	*/
-	gapi.hangout.onParticipantsChanged.add(goog.bind(this.onParticipantsChanged, this));
+		/**
+		 * Monitor the participants
+		*/
+		gapi.hangout.onParticipantsChanged.add(goog.bind(this.onParticipantsChanged, this));
 
-	/**
-	 * Monitor the enabled participants
-	*/
-	gapi.hangout.onEnabledParticipantsChanged.add(goog.bind(this.onEnabledParticipantsChanged, this));
+		/**
+		 * Monitor the enabled participants
+		*/
+		gapi.hangout.onEnabledParticipantsChanged.add(goog.bind(this.onEnabledParticipantsChanged, this));
 
-	/**
-	 * Detect of the publication of the hangout has changed
-	*/
-	gapi.hangout.onPublicChanged.add(goog.bind(this.onPublicChanged, this));
+		/**
+		 * Detect of the publication of the hangout has changed
+		*/
+		gapi.hangout.onPublicChanged.add(goog.bind(this.onPublicChanged, this));
+	}catch(e){
+		console.error("Unable to bind gapi events", e);
+	}
 }
 
 /**
@@ -137,7 +147,7 @@ drop.app.prototype.onApiReady = function(ApiReadyEvent)
 */
 drop.app.prototype.onAppVisible = function(AppVisibleEvent)
 {
-	this.app_visable = AppVisibleEvent.isAppVisible;
+	this.appVisable = AppVisibleEvent.isAppVisible;
 }
 
 /**
@@ -162,7 +172,7 @@ drop.app.prototype.onEnabledParticipantsChanged = function(EnabledParticipantsCh
  * Fired when hangouts visibily is changed
  * @param {gapi.hangout.PublicChangedEvent} AppVisibleEvent
 */
-drop.app.prototype.onAppVisible = function(PublicChangedEvent)
+drop.app.prototype.onPublicChanged = function(PublicChangedEvent)
 {
-	this.hangout_public = AppVisibleEvent.isPublic;
+	this.isPublic = AppVisibleEvent.isPublic;
 }
