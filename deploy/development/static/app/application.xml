@@ -1,0 +1,15 @@
+<Module>
+  <ModulePrefs title="Hangout Drop">
+    <Require feature="rpc"/>
+    <Require feature="views"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+      <!-- Immport GAPI -->
+      <script src="//talkgadget.google.com/hangouts/_/api/hangout.js?v=1.1"></script>
+
+      <!-- Import Application -->
+      <script src="//hangoutdrop.appspot.com/s/app/application.js"></script>
+    ]]>
+</Content>
+</Module>

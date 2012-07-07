@@ -5,10 +5,21 @@
 
 goog.require("goog.dom");
 goog.require("goog.style");
-goog.provide("hangout_drop");
+goog.require("drop.app")
+goog.provide("drop");
+goog.provide("drop.config");
 
+/**
+ * Server Based domain
+*/
+drop.config.base_domain = "hangoutdrop.appspot.com";
 
-hangout_drop = function()
-{
+/**
+ * static path
+*/
+drop.config.static_path = "/s/";
 
-}
+/**
+ * Instantiate the application
+*/
+new drop.app();

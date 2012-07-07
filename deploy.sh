@@ -16,7 +16,7 @@ CMD_CLOSUREBUILDER="$DIR/google-closure-library/closure/bin/build/closurebuilder
 CLOSURE_ROOT_PATH="$DIR/google-closure-library/"
 
 # Application root namespace
-APP_ROOT_NS="hangout_drop"
+APP_ROOT_NS="drop"
 
 # Application root path
 APP_ROOT_PATH="$DIR/development"
@@ -29,7 +29,7 @@ deploy_type="development"
 #fi
 
 # Application output path
-APP_OUTPUT_FILE=$DIR"/deploy/$deploy_type/static/application.js"
+APP_OUTPUT_FILE=$DIR"/deploy/$deploy_type/static/app/application.js"
 
 # Ask if we should run the compiler on the source tree
 read -p "Compile source code (*y|n): " compileryn
@@ -41,7 +41,8 @@ if [ "$compileryn" != "n" ]; then
 	#Defualt compile mode
 	COMPILE_MODE="script"
 
-	#COMPILE_CMD=$COMPILE_CMD" --compiler_flags=\"--externs=$DIR/closure-externs/opensocial.js\" --compiler_flags=\"--externs=$DIR/closure-externs/gapi_v1.js\""
+	COMPILE_CMD=$COMPILE_CMD" --compiler_flags=--externs=$DIR/closure-externs/opensocial.js"
+	COMPILE_CMD=$COMPILE_CMD" --compiler_flags=--externs=$DIR/closure-externs/gapi_v1.js"
 	COMPILE_CMD=$COMPILE_CMD" --root=$CLOSURE_ROOT_PATH"
 	COMPILE_CMD=$COMPILE_CMD" --root=$APP_ROOT_PATH"
 	COMPILE_CMD=$COMPILE_CMD" --namespace=$APP_ROOT_NS"
