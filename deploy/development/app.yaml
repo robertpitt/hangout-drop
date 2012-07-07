@@ -5,5 +5,10 @@ threadsafe: true
 api_version: 1
 
 handlers:
+- url: /s
+  static_dir: /static
+  secure: always
+
 - url: /.*
   script: website.app
+  secure: always
