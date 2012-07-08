@@ -5,6 +5,12 @@
   </ModulePrefs>
   <Content type="html">
     <![CDATA[
+      <!-- Wrapper -->
+      <div id="wrapper"></div>
+
+      <!-- Closure Consts -->
+      <script type="text/javascript">var CLOSURE_NO_DEPS = true;</script>
+
       <!-- Immport GAPI -->
       <script src="//talkgadget.google.com/hangouts/_/api/hangout.js?v=1.1"></script>
 

@@ -1,0 +1,22 @@
+/**
+ * Define Variables
+*/
+@def BG_COLOR              rgb(255, 255, 255);
+@def MAX_WIDTH             100%;
+@def MAX_HEIGHT            100%;
+
+/**
+ * Define size function
+*/
+@defmixin size(WIDTH, HEIGHT) {
+  width: WIDTH;
+  height: HEIGHT;
+}
+
+body {
+  background-color: BG_COLOR;
+}
+
+#wrapper {
+	@mixin size(MAX_WIDTH, MAX_HEIGHT);
+}

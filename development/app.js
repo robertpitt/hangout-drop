@@ -2,6 +2,10 @@
  * Name: Hangout Drop
  * Description: Real-time sharing application for all forms of media.
 */
+
+goog.require("goog.dom");
+goog.require("goog.events");
+goog.require('goog.dom.ViewportSizeMonitor');
 goog.provide("drop.app");
 
 /**
@@ -57,6 +61,12 @@ drop.app = function()
 	 * @type {Booleon}
 	*/
 	this.appVisable = true;
+
+	/**
+	 * Create a view port monitor
+	 * @type {goog.dom.ViewportSizeMonitor}
+	*/
+	this.ViewportSizeMonitor = new goog.dom.ViewportSizeMonitor();
 
 	/**
 	 * Bind {gapi.hangout.ApiReadyEvent} event
@@ -139,6 +149,22 @@ drop.app.prototype.onApiReady = function(ApiReadyEvent)
 	}catch(e){
 		console.error("Unable to bind gapi events", e);
 	}
+
+
+	/**
+	 * Bind browser based events
+	*/
+	try
+	{
+		/**
+		 * Monitor view port for changes
+		*/
+		goog.events.listen(this.ViewportSizeMonitor, goog.events.EventType.RESIZE, goog.bind(this.onViewportChanged, this));
+	}catch(e) {
+		console.error("Unable to bind view port monitor", e);
+	}
+
+	
 }
 
 /**
@@ -175,4 +201,13 @@ drop.app.prototype.onEnabledParticipantsChanged = function(EnabledParticipantsCh
 drop.app.prototype.onPublicChanged = function(PublicChangedEvent)
 {
 	this.isPublic = AppVisibleEvent.isPublic;
+}
+
+/**
+ * Fired when view port has been changed
+ * @param {Event} ViewportEvent
+*/
+drop.app.prototype.onViewportChanged = function(ViewportEvent)
+{
+	console.log("ResizeEvent", ViewportEvent.getSize());
 }

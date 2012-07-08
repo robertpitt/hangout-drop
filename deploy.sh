@@ -28,6 +28,9 @@ APP_ROOT_PATH="$DIR/development"
 deploy_type="development"
 #fi
 
+# Stylesheets output path
+STYLE_OUTPUT_FILE=$DIR"/deploy/$deploy_type/static/app/stylesheet.css"
+
 # Application output path
 APP_OUTPUT_FILE=$DIR"/deploy/$deploy_type/static/app/application.js"
 
@@ -39,18 +42,18 @@ if [ "$compileryn" != "n" ]; then
 	COMPILE_CMD="$CMD_CLOSUREBUILDER --compiler_jar=$DIR/compiler.jar"
 
 	#Defualt compile mode
-	COMPILE_MODE="script"
+	COMPILE_MODE="compiled"
 
 	COMPILE_CMD=$COMPILE_CMD" --compiler_flags=--externs=$DIR/closure-externs/opensocial.js"
 	COMPILE_CMD=$COMPILE_CMD" --compiler_flags=--externs=$DIR/closure-externs/gapi_v1.js"
 	COMPILE_CMD=$COMPILE_CMD" --root=$CLOSURE_ROOT_PATH"
 	COMPILE_CMD=$COMPILE_CMD" --root=$APP_ROOT_PATH"
 	COMPILE_CMD=$COMPILE_CMD" --namespace=$APP_ROOT_NS"
+	COMPILE_CMD=$COMPILE_CMD" --compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS"
 
-	read -p "use ADVANCED_OPTIMIZATIONS (*y|n): " advanced_compile
-	if [ "$advanced_compile" != "n" ]; then
-		COMPILE_MODE="compiled"
-		COMPILE_CMD=$COMPILE_CMD" --compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS"
+	read -p "use ADVANCED_OPTIMIZATIONS (y|*n): " advanced_compile
+	if [ "$advanced_compile" != "y" ]; then
+		COMPILE_MODE="script"
 	fi
 
 	# Set the output mode
@@ -61,6 +64,9 @@ if [ "$compileryn" != "n" ]; then
 
 	# Execute the compile
 	`$COMPILE_CMD > $APP_OUTPUT_FILE`
+
+	# Compile the styleheets
+	`java -jar closure-stylesheets.jar --pretty-print $APP_ROOT_PATH/stylesheet.gss > $STYLE_OUTPUT_FILE`
 fi
 
 # Confirm with a keystroke.
